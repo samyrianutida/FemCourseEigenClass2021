@@ -29,8 +29,9 @@ int main ()
 {
     GeoMesh gmesh;
     ReadGmsh read;
-    std::string filename("quads.msh"); //malha 1
-    //std::string filename("outramalha.msh");
+    //std::string filename("quads.msh"); //malha 1 Jeferson
+    //std::string filename("malhatriang.msh"); //malha triangular
+    std::string filename("malhaquad.msh"); //malha quadrada
 #ifdef MACOSX
     filename = "../"+filename;
 #endif
@@ -67,8 +68,8 @@ int main ()
     PostProcessTemplate<Poisson> postprocess;
     auto exact = [](const VecDouble &x, VecDouble &val, MatrixDouble &deriv)
     {
-        val[0] = (1.-x[0])*x[0]*(1-x[1])*x[1]; //função
-        deriv(0,0) = (1.-2.*x[0])*(1-x[1])*x[1]; //derivadas parciais
+        val[0] = (1.-x[0])*x[0]*(1-x[1])*x[1]; //função exemplo professor
+        deriv(0,0) = (1.-2.*x[0])*(1-x[1])*x[1]; //derivadas parciais exemplo prof
         deriv(1,0) = (1-2.*x[1])*(1-x[0])*x[0];
     };
 

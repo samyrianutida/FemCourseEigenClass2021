@@ -39,7 +39,8 @@ int main ()
 {
     GeoMesh gmesh;
     ReadGmsh read;
-    std::string filename("oneD.msh"); //malha linear
+    //std::string filename("oneD.msh"); //malha 1D exemplo
+    std::string filename("oneD25.msh"); //malha 1D função proposta
 #ifdef MACOSX
     filename = "../"+filename;
 #endif
@@ -56,7 +57,8 @@ int main ()
     
     auto force = [](const VecDouble &x, VecDouble &res)
     {
-        res[0] = 1.; //laplaciano da função
+       // res[0] = 1.; //- laplaciano da função exemplo
+        res[0] = 10.; //- laplaciano da função proposta (seria -10, pego o oposto)
     };
     mat1->SetForceFunction(force);
     MatrixDouble proj(1,1),val1(1,1),val2(1,1);
@@ -87,8 +89,10 @@ int main ()
 }
 void exact(const VecDouble &point,VecDouble &val, MatrixDouble &deriv){
 
-    deriv(0,0) = 4-point[0]; //derivada da função
-    val[0]=point[0]*(8.-point[0])/2.; //função para aproximação
+    //deriv(0,0) = 4-point[0]; //derivada da função exemplo
+   // val[0]=point[0]*(8.-point[0])/2.; //função para aproximação exemplo
+    deriv(0, 0) = 5. * (25. - (2. * point[0])); //derivada da função objetivo proposta
+    val[0] = 5. * point[0] * (25. - point[0]); //função objetivo samyrian
     return;
 }
 
