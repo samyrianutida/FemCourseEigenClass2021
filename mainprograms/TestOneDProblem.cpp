@@ -39,7 +39,7 @@ int main ()
 {
     GeoMesh gmesh;
     ReadGmsh read;
-    std::string filename("oneD.msh");
+    std::string filename("oneD.msh"); //malha linear
 #ifdef MACOSX
     filename = "../"+filename;
 #endif
@@ -56,7 +56,7 @@ int main ()
     
     auto force = [](const VecDouble &x, VecDouble &res)
     {
-        res[0] = 1.;
+        res[0] = 1.; //laplaciano da função
     };
     mat1->SetForceFunction(force);
     MatrixDouble proj(1,1),val1(1,1),val2(1,1);
@@ -87,8 +87,8 @@ int main ()
 }
 void exact(const VecDouble &point,VecDouble &val, MatrixDouble &deriv){
 
-    deriv(0,0) = 4-point[0];
-    val[0]=point[0]*(8.-point[0])/2.;
+    deriv(0,0) = 4-point[0]; //derivada da função
+    val[0]=point[0]*(8.-point[0])/2.; //função para aproximação
     return;
 }
 

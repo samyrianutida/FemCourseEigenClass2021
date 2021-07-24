@@ -5,7 +5,7 @@
  */
 
 #include "IntRule0d.h"
-///\cond
+ ///\cond
 #include <iostream> 
 #include <vector>
 #include <math.h>
@@ -14,31 +14,28 @@
 using namespace std;
 
 
-IntRule0d::IntRule0d(){
+IntRule0d::IntRule0d() {
 
 }
 
 IntRule0d::IntRule0d(int order) {
-    if (order != 0) {
-        DebugStop();
-    }
+    if (order != 0)
 
-    SetOrder(order);
+        SetOrder(order);
 
 }
 
 
 void IntRule0d::SetOrder(int order) {
-    fOrder = order;  
-    
-    if (order != 0) {
-        DebugStop();
-    }
+    fOrder = order;
 
-    int npoints = 1;
-    
-    fPoints.resize(npoints, 0);
-    fWeights.resize(npoints);
-    fWeights[0] = 1.;
-    
+    if (order != 0) {
+
+        int npoints = 1;
+
+        fPoints.resize(npoints, 0);
+        fWeights.resize(npoints);
+        fWeights[0] = 1.;
+
+    }
 }

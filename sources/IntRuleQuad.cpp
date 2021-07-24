@@ -4,28 +4,109 @@
  * and open the template in the editor.
  */
 
-///\cond
+ ///\cond
 #include <iostream> 
 ///\endcond
 #include "IntRule1d.h"
 #include "IntRuleQuad.h"
 
-IntRuleQuad::IntRuleQuad(){
+IntRuleQuad::IntRuleQuad() {
 }
 
 IntRuleQuad::IntRuleQuad(int order) {
-    DebugStop();
+    SetOrder(order);
 }
 
 void IntRuleQuad::SetOrder(int order) {
-    DebugStop();
+
+    fOrder = order;
+    if (order < 0 || order > MaxOrder()) DebugStop();
+
+    switch (order)
+    {
+    case 0:
+    case 1:
+
+        fPoints.resize(1, Dimension());
+        fWeights.resize(1);
+        //Pontos
+        fPoints(0, 0) = 0.;
+        fPoints(0, 1) = 0.;
+        //Peso
+        fWeights[0] = 4.;
+        break;
+
+    case 2:
+    case 3:
+        fPoints.resize(4, Dimension());
+        fWeights.resize(4);
+        //Pontos
+        fPoints(0, 0) = -1. / sqrt(3.);
+        fPoints(0, 1) = -1. / sqrt(3.);
+        fPoints(1, 0) = 1. / sqrt(3.);
+        fPoints(1, 1) = -1. / sqrt(3.);
+        fPoints(2, 0) = -1. / sqrt(3.);
+        fPoints(2, 1) = 1. / sqrt(3.);
+        fPoints(3, 0) = 1. / sqrt(3.);
+        fPoints(3, 1) = 1. / sqrt(3.);
+        //Pesos
+        fWeights[0] = 1.;
+        fWeights[1] = 1.;
+        fWeights[2] = 1.;
+        fWeights[3] = 1.;
+        break;
+
+    case 4:
+    case 5:
+
+        fPoints.resize(9, Dimension());
+        fWeights.resize(9);
+        //POntos
+
+        fPoints(0, 0) = -sqrt(3. / 5);
+        fPoints(0, 1) = -sqrt(3. / 5);
+        fPoints(1, 0) = 0.;
+        fPoints(1, 1) = -sqrt(3. / 5);
+        fPoints(2, 0) = sqrt(3. / 5);
+        fPoints(2, 1) = -sqrt(3. / 5);
+        fPoints(3, 0) = -sqrt(3. / 5);
+        fPoints(3, 1) = 0.;
+        fPoints(4, 0) = 0.;
+        fPoints(4, 1) = 0.;
+        fPoints(5, 0) = sqrt(3. / 5);
+        fPoints(5, 1) = 0.;
+        fPoints(6, 0) = -sqrt(3. / 5);
+        fPoints(6, 1) = sqrt(3. / 5);
+        fPoints(7, 0) = 0.;
+        fPoints(7, 1) = sqrt(3. / 5);
+        fPoints(8, 0) = sqrt(3. / 5);
+        fPoints(8, 1) = sqrt(3. / 5);
+
+        //Pesos
+        fWeights[0] = 25. / 81;
+        fWeights[1] = 40. / 81;
+        fWeights[2] = 25. / 81;
+        fWeights[3] = 40. / 81;
+        fWeights[4] = 64. / 81;
+        fWeights[5] = 40. / 81;
+        fWeights[6] = 25. / 81;
+        fWeights[7] = 40. / 81;
+        fWeights[8] = 25. / 81;
+
+        break;
+
+    default:
+        DebugStop();
+        break;
+    }
+
 }
 
-void IntRuleQuad::gaulegQuad(const double x1, const double x2, VecDouble &co, VecDouble &w) {
+void IntRuleQuad::gaulegQuad(const double x1, const double x2, VecDouble& co, VecDouble& w) {
     IntRule1d x;
     IntRule1d y;
-    
-    int n = w.size();   
+
+    int n = w.size();
 
     VecDouble cox(n);
     VecDouble coy(n);
@@ -35,8 +116,8 @@ void IntRuleQuad::gaulegQuad(const double x1, const double x2, VecDouble &co, Ve
 
     x.gauleg(x1, x2, cox, wx);
     y.gauleg(x1, x2, coy, wy);
-    
-    co.resize(2*n*n);
+
+    co.resize(2 * n * n);
     w.resize(n * n);
 
     for (int i = 0; i < n; i++) {

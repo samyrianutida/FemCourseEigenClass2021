@@ -12,7 +12,7 @@
 #include "GeomTriangle.h"
 #include "GeomTetrahedron.h"
 #include "GeoMesh.h"
-///\cond
+ ///\cond
 #include <math.h> 
 #include <stdio.h>
 ///\endcond
@@ -20,9 +20,9 @@
 using namespace std;
 
 template<class TGeom>
-GeoElementTemplate<TGeom>::GeoElementTemplate(const VecInt &nodeindices, int materialid, GeoMesh *gmesh, int index) : GeoElement(materialid, gmesh, index) {
-    if(index >= gmesh->NumElements()) gmesh->SetNumElements(index + 1);
-    if(nodeindices.size() != Geom.nCorners) DebugStop();
+GeoElementTemplate<TGeom>::GeoElementTemplate(const VecInt& nodeindices, int materialid, GeoMesh* gmesh, int index) : GeoElement(materialid, gmesh, index) {
+    if (index >= gmesh->NumElements()) gmesh->SetNumElements(index + 1);
+    if (nodeindices.size() != Geom.nCorners) DebugStop();
     Geom.SetNodes(nodeindices);
     for (int side = 0; side < TGeom::nSides; side++) {
         Geom.SetNeighbour(side, GeoElementSide(this, side));
@@ -31,12 +31,12 @@ GeoElementTemplate<TGeom>::GeoElementTemplate(const VecInt &nodeindices, int mat
 }
 
 template<class TGeom>
-GeoElementTemplate<TGeom>::GeoElementTemplate(const GeoElementTemplate &copy) {
+GeoElementTemplate<TGeom>::GeoElementTemplate(const GeoElementTemplate& copy) {
     Geom = copy.Geom;
 }
 
 template<class TGeom>
-GeoElementTemplate<TGeom> &GeoElementTemplate<TGeom>::operator=(const GeoElementTemplate &copy) {
+GeoElementTemplate<TGeom>& GeoElementTemplate<TGeom>::operator=(const GeoElementTemplate& copy) {
     Geom = copy.Geom;
     return *this;
 }
@@ -47,7 +47,7 @@ MElementType GeoElementTemplate<TGeom>::Type() const {
 }
 
 template<class TGeom>
-void GeoElementTemplate<TGeom>::X(const VecDouble &xi, VecDouble &x) const{
+void GeoElementTemplate<TGeom>::X(const VecDouble& xi, VecDouble& x) const {
     int NNodes = this->NNodes();
     int dim = GMesh->Dimension();
     MatrixDouble coord(dim, NNodes);
@@ -65,7 +65,7 @@ void GeoElementTemplate<TGeom>::X(const VecDouble &xi, VecDouble &x) const{
 }
 
 template<class TGeom>
-void GeoElementTemplate<TGeom>::GradX(const VecDouble &xi, VecDouble &x, MatrixDouble &gradx) const
+void GeoElementTemplate<TGeom>::GradX(const VecDouble& xi, VecDouble& x, MatrixDouble& gradx) const
 {
     int NNodes = this->NNodes();
     MatrixDouble coord(3, NNodes);
@@ -87,7 +87,7 @@ void GeoElementTemplate<TGeom>::GradX(const VecDouble &xi, VecDouble &x, MatrixD
 
 
 template<class TGeom>
-void GeoElementTemplate<TGeom>::Print(std::ostream &out) const
+void GeoElementTemplate<TGeom>::Print(std::ostream& out) const
 {
     out << "Number of nodes:\t" << this->NNodes() << std::endl;
     out << "Corner nodes:\t\t" << this->NCornerNodes() << std::endl;
@@ -102,10 +102,11 @@ void GeoElementTemplate<TGeom>::Print(std::ostream &out) const
     for (int i = 0; i < nsides; i++) {
         out << "Neighbours for side " << i << ":\t";
         GeoElementSide neighbour = Neighbour(i);
-        GeoElementSide thisside((GeoElement *)this, i);
+        GeoElementSide thisside((GeoElement*)this, i);
         if (!(neighbour.Element() != 0 && neighbour.Side() > -1)) {
             out << "No neighbour\n";
-        } else {
+        }
+        else {
             while (neighbour.Element() != thisside.Element() || neighbour.Side() != thisside.Side()) {
                 out << neighbour.Element()->GetIndex() << "/" << neighbour.Side() << ' ';
 
@@ -117,7 +118,7 @@ void GeoElementTemplate<TGeom>::Print(std::ostream &out) const
 }
 
 template<class TGeom>
-int GeoElementTemplate<TGeom>::SideIsUndefined(int side) const{
+int GeoElementTemplate<TGeom>::SideIsUndefined(int side) const {
     if (side < 0 || side > NSides()) {
         std::cout << "GeoElementTemplate<TGeom>::SideIsUndefined - bad side: " << side << std::endl;
         DebugStop();

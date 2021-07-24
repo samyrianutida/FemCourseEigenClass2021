@@ -10,8 +10,8 @@
 ///\endcond
 #include "Shape1d.h"
 
-void Shape1d::Shape(const VecDouble &xi, VecInt &orders, VecDouble &phi, MatrixDouble &dphi){
-    
+void Shape1d::Shape(const VecDouble& xi, VecInt& orders, VecDouble& phi, MatrixDouble& dphi) {
+
     if (orders[0] < 0 || orders[1] < 0 || orders[2] < 0) {
         std::cout << "Shape1d::Shape: Invalid dimension for arguments: order\n";
         DebugStop();
@@ -24,19 +24,41 @@ void Shape1d::Shape(const VecDouble &xi, VecInt &orders, VecDouble &phi, MatrixD
         std::cout << "Shape1d::Shape: Please implement it for order > 2\n";
         DebugStop();
     }
-    
+
     auto nshape = NShapeFunctions(orders);
+
     phi.resize(nshape);
-    dphi.resize(1,nshape);
-        
-    std::cout << "Please implement me\n";
-    DebugStop();
+    dphi.resize(1, nshape);
+
+    //implement stars here
+
+    double qsi = xi[0];
+
+    phi[0] = (1. - qsi) / 2.;
+    phi[1] = (1. + qsi) / 2.;
+    dphi(0, 0) = -1. / 2.;
+    dphi(0, 1) = 1. / 2.;
+
+    int is = 2;
+
+    if (orders[is] == 2) {
+        int is1 = 0;
+        int is2 = 1;
+
+        phi[2] = 4. * phi[is1] * phi[is2];
+        dphi(0, 2) = 4. * (dphi(0, is1) * phi[is2] + phi[is1] * dphi(0, is2));
+    }
+
+    else if (orders[is] != 1) DebugStop();
+
 }
+// implement finished
+
 
 /// returns the number of shape functions associated with a side
-int Shape1d::NShapeFunctions(int side, int order){
+int Shape1d::NShapeFunctions(int side, int order) {
 
-    if(order < 1 || order >2) DebugStop();
+    if (order < 1 || order >2) DebugStop();
     switch (side)
     {
     case 0:
@@ -46,9 +68,9 @@ int Shape1d::NShapeFunctions(int side, int order){
         return 1;
         break;
     case 2:
-        return order-1;
+        return order - 1;
         break;
-    
+
     default:
         std::cout << "Shape1d::NShapeFunctions : Wrong side " << side << "\n";
         DebugStop();
@@ -59,12 +81,12 @@ int Shape1d::NShapeFunctions(int side, int order){
 }
 
 /// returns the total number of shape functions
-int Shape1d::NShapeFunctions(VecInt &orders) {
-    
+int Shape1d::NShapeFunctions(VecInt& orders) {
+
     int nsf_tot = 0;
-    for (int is=0; is<3; is++) {
+    for (int is = 0; is < 3; is++) {
         nsf_tot += NShapeFunctions(is, orders[is]);
     }
-    
+
     return nsf_tot;
 }
