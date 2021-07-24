@@ -48,7 +48,9 @@ int main ()
 
     auto force = [](const VecDouble &x, VecDouble &res)
     {
-        res[0] = 2.*(1.-x[0])*x[0]+2.*(1-x[1])*x[1]; //laplaciano - laplace(função)
+       // res[0] = 2.*(1.-x[0])*x[0]+2.*(1-x[1])*x[1]; //laplaciano - laplace(função)
+        res[0] = (x[0] * x[0] * (-x[1] * x[1] + x[1] + 2) + x[0] * (x[1] * x[1] - x[1] - 2) + 2 * (x[1] - 1) * x[1])* sin(x[1]) + 2 * (x[0] - 1) * x[0] * (2 * x[1] - 1) * cos(x[1]);
+        // Laplaciano da função proposta
     };
     mat1->SetForceFunction(force);
     MatrixDouble proj(1,1),val1(1,1),val2(1,1);
@@ -66,11 +68,13 @@ int main ()
         Analysis locAnalysis(&cmesh);
     locAnalysis.RunSimulation();
     PostProcessTemplate<Poisson> postprocess;
-    auto exact = [](const VecDouble &x, VecDouble &val, MatrixDouble &deriv)
-    {
-        val[0] = (1.-x[0])*x[0]*(1-x[1])*x[1]; //função exemplo professor
-        deriv(0,0) = (1.-2.*x[0])*(1-x[1])*x[1]; //derivadas parciais exemplo prof
-        deriv(1,0) = (1-2.*x[1])*(1-x[0])*x[0];
+    auto exact = [](const VecDouble &x, VecDouble &val, MatrixDouble &deriv){
+        //val[0] = (1.-x[0])*x[0]*(1-x[1])*x[1]; //função exemplo professor
+        //deriv(0,0) = (1.-2.*x[0])*(1-x[1])*x[1]; //derivadas parciais exemplo prof
+        //deriv(1,0) = (1-2.*x[1])*(1-x[0])*x[0];
+        val[0] = (1. - x[0]) * x[0] * (1 - x[1]) * x[1] * sin(x[1]); //função proposta para avaliação
+        deriv(0, 0) = (-1. + 2. * x[0]) * (x[1] - 1) * sin(x[1]); // derivada parcial
+        deriv(1, 0) = (x[0] - 1) * x[0] * ((2. * x[1] - 1) * sin(x[1]) + (x[1] - 1) * x[1] * cos(x[1])); // derivada parcial 
     };
 
 //    if (!strcmp("Sol", name.c_str())) return ESol;
