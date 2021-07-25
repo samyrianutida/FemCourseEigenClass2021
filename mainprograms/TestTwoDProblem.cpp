@@ -30,8 +30,8 @@ int main ()
     GeoMesh gmesh;
     ReadGmsh read;
     //std::string filename("quads.msh"); //malha 1 Jeferson
-    //std::string filename("malhatriang.msh"); //malha triangular
-    std::string filename("malhaquad.msh"); //malha quadrada
+    std::string filename("malhatriang.msh"); //malha triangular
+    //std::string filename("malhaquad.msh"); //malha quadrada
 #ifdef MACOSX
     filename = "../"+filename;
 #endif

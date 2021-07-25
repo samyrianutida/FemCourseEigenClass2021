@@ -1,6 +1,6 @@
 // Gmsh project created on Sat Jul 24 12:59:27 2021
 SetFactory("OpenCASCADE");
-a = 5;
+a = 30;
 Rectangle(1) = {0, 0, 0, 1, 1, 0};
 //+
 Physical Point("fix", 3) = {1};
